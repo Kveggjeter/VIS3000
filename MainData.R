@@ -1,13 +1,14 @@
 # Author: Eirik
-# This is the script for cleaning the main data we got. Have not yet been able to finish up
-# merging, because I'm not entirely sure what data belongs where tbh.
+# This is the script for cleaning the main data we got. There is some dis
 
-getwd()
+setwd("data")
 # Remember to set your own path here or change this to file.choose() for running just one time
 # The data has been pushed to my branch
-setwd("C:\\Users\\sundb\\OneDrive\\Documents\\vis3000\\VIS3000\\data")
-table1 <- read.csv("general.csv")
-table2 <- read.csv("mp.csv")
+table1 <- read.csv("s2.csv")
+table2 <- read.csv("s3.csv")
+table3 <- read.csv("s4.csv")
+table4 <- read.csv("s5.csv")
+table5 <- read.csv("s6.csv")
 
 # Splitting dataframes into subframes
 # I started out using this method, but got deprecated pretty fast. I still want to use it, 
@@ -17,70 +18,141 @@ splitting <- function(df, splitted, listName){
   return(listName)
 }
 
+# Fetching the first part of the dataset. "Title" is usually locked as columnheader
+first <- function(df) {
+  nf <- df[1:19, ]
+  return(nf)
+}
+
+dual <- function(df) {
+  nf <-df[20:39, ]
+  return(nf)
+}
+
+
+# Writing to folder
+saving <- function(df){
+  write.csv(df, paste0(sn, "_", year, ".csv"), row.names = TRUE)
+}
+
 df1 <- as.data.frame(table1)
 df2 <- as.data.frame(table2)
+df3 <- as.data.frame(table3)
+df4 <- as.data.frame(t(table4))
+df5 <- as.data.frame(table5)
 
-# Reversing the orders, since df2 for some reason comes with columns and rows swtiched
+# For cleaning the first df. The declaration and usage of "sn" and "year must be inside the function. Cannot use a modular 
+# saving function, that'll just mute and reassign the values to be what it originally was inside the saving function. 
+top <- function(df) {
+  
+    sn <- names(df[1])
+    if(sn == "V1") {
+      sn <- rownames(df)[1]
+    }
+    year <- df[1,1]
+    colnames(df) <- df[1, ]
+    df <- df[-1, ]
+    rownames(df) <- df[, 1]
+    df <- df[, -1]
+    write.csv(df, paste0(sn, "_", year, ".csv"), row.names = TRUE)
+}
+
+# Cleaning the rest of the data, same as top
+mid <- function(df) {
+  
+    sn <- df[1,1]
+    if (is.na(sn) || sn == "") {
+      sn <- rownames(df)[2]
+    }
+    year <- df[2,1]
+    df <- df[-1, ]
+    colnames(df) <- df[1, ]
+    df <- df[-1, ]
+    rownames(df) <- df[, 1]
+    df <- df[, -1]
+    write.csv(df, paste0(sn, "_", year, ".csv"), row.names = TRUE)
+}
+
+
+# ********************  df1  **********************
 {
-sub4 <- as.data.frame(t(df2[1:110, ]))
-sub5 <- as.data.frame(t(df2[112:222, ]))
-sub6 <- as.data.frame(t(df2[224:334, ]))
-list2 <- list(sub4, sub5, sub6)
-# View(list2[[1]])
-# View(list2[[2]])
-# View(list2[[3]])
+one <- first(df1)
+split <- c(20, seq(20 + 20, nrow(df1), by = 20))
+j <- splitting(df1, split, j)
+
+  top(one)
+  for (i in seq_along(j)) {
+    mid(j[[i]])
+  }
 }
 
-
-# Warcrimes_1. Cleans df2
-for (i in seq_along(list2)) {
-  
-  if (i == 1) {
-    sn <- row.names(list2[[i]][1, ])
-    year <- list2[[i]][1,1]
-   
-  } else {
-    sn <- list2[[i]][1,1]
-    year <- list2[[i]][1,2]
-  }
-  
-  temp <- list2[[i]][1:19, ]
-  tempLast <-list2[[i]][21:24, ]
-  colnames(temp) <- temp[1, ]
-  temp <- temp[-1, ]
-  colnames(tempLast) <- tempLast[1, ]
-  tempLast <- tempLast[-1, ]
-  if (i == 1) {
-  list2[[i]] <- rbind(temp, tempLast)
-  rownames(list2[[i]]) <- list2[[i]][, 1]
-  list2[[i]] <- list2[[i]][, -1]
-  } else {
-    temp <- temp[, -1]
-    rownames(temp) <- temp[, 1]
-    temp <- temp[, -1]
-    
-    tempLast <- tempLast[, -1]
-    rownames(tempLast) <- tempLast[, 1]
-    tempLast <- tempLast[, -1]
-    
-    list2[[i]] <- rbind(temp, tempLast)
-  }
-  print(sn)
-  print(year)
-  write.csv(list2[[i]], paste0(sn, "_", year, ".csv"), row.names = TRUE)
+# ********************  df2  **********************
+{
+  top(first(df2))
+  mid(dual(df2))
 }
 
-split1 <- seq(1, nrow(df1), by = 20)
-list1 <- splitting(df1, split1, list1)
+# ********************  df3  **********************
+{
+  top(first(df3))
+  mid(dual(df3))
+}
 
-# Warcrimes_2, but with a lot less drama. This data was much better cleaned from before
-for (i in seq_along(list1)) {
-  year <- list1[[i]][1, 1]
-  colnames(list1[[i]]) <- list1[[i]][1, ]
-  list1[[i]] <- list1[[i]][-1, ]
-  rownames(list1[[i]]) <- list1[[i]][, 1]
-  list1[[i]] <- list1[[i]][, -1]
-  write.csv(list1[[i]], paste0(year, ".csv"), row.names = TRUE)
+# ********************  df4  **********************
+{
+  top(first(df4))
+  mid(dual(df4))
+}
+  
+  
+# A somewhat special case, some weird placement of data that made it not fit with the rest. It's to different from the others that
+# I see any necessity of creating an abstraction for this
+# ********************  df5  **********************
+{
+  # Reversing the orders, since df5 for some reason comes with columns and rows switched
+  {
+    sub5a <- as.data.frame(t(df5[1:110, ]))
+    sub5b <- as.data.frame(t(df5[112:222, ]))
+    sub5c <- as.data.frame(t(df5[224:334, ]))
+    sets <- list(sub5a, sub5b, sub5c)
+  }
+  
+  
+  # Warcrimes_1. Cleans df5 and merges the weird double-columns 
+  for (i in seq_along(sets)) {
+    
+    if (i == 1) {
+      sn <- row.names(sets[[i]][1, ])
+      year <- sets[[i]][1,1]
+      
+    } else {
+      sn <- sets[[i]][1,1]
+      year <- sets[[i]][1,2]
+    }
+    
+    temp <- sets[[i]][1:19, ]
+    tempLast <- sets[[i]][21:24, ]
+    colnames(temp) <- temp[1, ]
+    temp <- temp[-1, ]
+    colnames(tempLast) <- tempLast[1, ]
+    tempLast <- tempLast[-1, ]
+    if (i == 1) {
+      sets[[i]] <- rbind(temp, tempLast)
+      rownames(sets[[i]]) <- sets[[i]][, 1]
+      sets[[i]] <- sets[[i]][, -1]
+    }else {
+      temp <- temp[, -1]
+      rownames(temp) <- temp[, 1]
+      temp <- temp[, -1]
+      
+      tempLast <- tempLast[, -1]
+      rownames(tempLast) <- tempLast[, 1]
+      tempLast <- tempLast[, -1]
+      
+      sets[[i]] <- rbind(temp, tempLast)
+    }
+    saving(sets[[i]])
+  }
 }
 
 
