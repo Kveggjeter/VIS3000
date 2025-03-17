@@ -1,12 +1,12 @@
 # Author: Eirik
-
+{
 # This is the script for cleaning the main data we got. It contains some general functions that are reusable for similar datasets.
 # Its still up for improvment.
 
 # Remember to import the datafiles that are needed for cleaning. If you work from other directory, it's important that you
 # place this script in that directory. The pathing is set to relative for where the script runs. If in doubt, i've added
 # a "getwd()" for checking
-setwd("data")
+# setwd("data")
 table1 <- read.csv("s2.csv")
 table2 <- read.csv("s3.csv")
 table3 <- read.csv("s4.csv")
@@ -49,7 +49,7 @@ df5 <- as.data.frame(table5)
 # For cleaning the first df. The declaration and usage of "sn" and "year must be inside the function. Cannot use a modular 
 # saving function, they'll just mute and reassign the values to be what it originally was inside the saving function. 
 top <- function(df) {
-  
+  df
     sn <- names(df[1])
     if(sn == "V1") {
       sn <- rownames(df)[1]
@@ -159,3 +159,5 @@ j <- splitting(df1, split, j)
     saving(sets[[i]])
   }
 }
+}
+
