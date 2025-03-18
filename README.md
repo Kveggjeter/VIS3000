@@ -2,8 +2,8 @@
 
 Repo for VIS3000.
 
-[!TIP}
-Hvordan sette opp spetakellet? 
+>[!TIP]
+>Hvordan sette opp spetakellet? 
 
 1. Last ned R fra -> [HER](https://cran.r-project.org/bin/windows/base/).
 2. Last ned R-studio fra -> [HER](https://posit.co/download/rstudio-desktop/).
@@ -16,7 +16,7 @@ git checkout -b dittNavn
 git push --set-upstream origin dittNavn
  
 ```
-[!NOTE]
-Kun push til egen branch. Hvis det skal merges med main må det lages en pull request. 
+>[!NOTE]
+>Kun push til egen branch. Hvis det skal merges med main må det lages en pull request. 
 
 
