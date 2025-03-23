@@ -21,6 +21,12 @@ table <- read.csv("UnEst.csv", fileEncoding = "Latin1", stringsAsFactors = FALSE
   df <- df[, -1]
   rownames(df) <- df[, 1]
   df <- df[, -1]
+  View(df)
+  df$'Location code' <- NULL
+  df$`SDMX code**`<- NULL
+  df$`Parent code`<- NULL
+  df$Year <- NULL
+  View(df)
 }
 
 # Inverting it so it can be used with our main df
