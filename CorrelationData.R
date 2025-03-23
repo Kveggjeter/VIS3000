@@ -1,72 +1,137 @@
-library(ggplot2)
-library(reshape2)
 # Author: Eirik
 # Script for checking the correlation between data
 # Testing different data
-
 {
-un <- read.csv("un_clean_2018.csv", row.names = 1)
-mp <- read.csv("Figure.S6a_2018.csv", row.names = 1)
-
-source("../CleaningTwoSets.R")
-data <- eqClean(mp, un)
-
-unDf <- data$unDf
-mpDf <- data$mpDf
-mpDf <- as.data.frame(t(mpDf))
-
-source("../ContinentVector.R")
-
-trashRemover <- function(df) {
-  df <- as.data.frame(t(df))
-  df$'Location code' <- NULL
-  df$`SDMX code**`<- NULL
-  df$`Parent code`<- NULL
-  df$Year <- NULL
-  return(df)
-}
-
-continent <- function(df1, df2, cont) {
-  unCols <- colnames(df1)[colnames(df1) %in% cont]
-  df1 <- df1[, unCols, drop = FALSE]
+  library(ggplot2)
+  library(reshape2)
+  library(dplyr)
+  library(tidyr)
+  source("../CleaningTwoSets.R")
+  source("../ContinentVector.R")
   
-  mpCols <- colnames(df2)[colnames(df2) %in% cont]
-  df2 <- df2[, mpCols, drop = FALSE]
-  return(list(df1 = df1, df2 = df2))
-}
+  un <- read.csv("un_clean_2018.csv", row.names = 1)
+  mp <- read.csv("Figure.S6a_2018.csv", row.names = 1)
 
-mpDf <- as.data.frame(t(mpDf))
-temp <- continent(unDf, mpDf, asia)
-unEf <- temp$df1
-mpEf <- temp$df2
+  data <- eqClean(mp, un)
+  unDf <- data$unDf
+  mpDf <- data$mpDf
+ 
+# Seperating countries by continent in seperate df
+  continent <- function(df1, df2, place) {
+    
+    unCols <- colnames(df1)[colnames(df1) %in% place]
+    df1 <- df1[, unCols, drop = FALSE]
+    
+    mpCols <- colnames(df2)[colnames(df2) %in% place]
+    df2 <- df2[, mpCols, drop = FALSE]
+    return(list(df1 = df1, df2 = df2))
+  }
 
-
-print(ncol(unEf))
-print(ncol(mpEf))
-
-unEf <- as.data.frame(t(unEf))
-mpEf <- as.data.frame(t(mpEf))
-trashRemover(unEf)
-
-
-correl = cor(unEf, mpEf, method = "spearman")
-View(correl)
-
-
-{
-  correl[abs(correl) < 0.5] <- NA
-  correl[correl == 1 ] <- NA
-  correl <- correl[rowSums(!is.na(correl)) > 0, colSums(!is.na(correl)) > 0]
+# Making a df based on continent queried. Has some print statements
+# in case the rows differs (it says ncol, but we're reversing the order later on)
+  contDf <- function(unDf, mpDf, place) {
+  
+    temp <- continent(unDf, mpDf, place)
+    newUn <- temp$df1
+    newMp <- temp$df2
+    
+    print(ncol(newUn))
+    print(ncol(newMp))
+    
+    newUn <- as.data.frame(t(newUn))
+    newMp <- as.data.frame(t(newMp))
+    return(list(newUn = newUn, newMp = newMp))
+  }
+# Setting up the correlation. Deciding what correlation value we want (cl) and the dataset (df)  
+  correl <- function(cl, df) {
+    df[abs(df) < cl] <- NA
+    df[df == 1] <- NA
+    df <- df[rowSums(!is.na(df)) > 0, colSums(!is.na(df)) > 0]
+    return(df)
   }
   
+  # Africa
+  {
+    af <- contDf(unDf, mpDf, africa)
+    afUn <- af$newUn
+    afMp <- af$newMp
+    afCor = cor(afUn, afMp, method = "spearman")
+  }
+  # Asia
+  {
+    as <- contDf(unDf, mpDf, asia)
+    asUn <- as$newUn
+    asMp <- as$newMp
+    asCor = cor(asUn, asMp, method = "spearman")
+  }
+  # Europe
+  {
+    eu <- contDf(unDf, mpDf, europe)
+    euUn <- eu$newUn
+    euMp <- eu$newMp
+    euCor = cor(euUn, euMp, method = "spearman")
+  }
+  # North America
+  {
+    us <- contDf(unDf, mpDf, north_america)
+    usUn <- us$newUn
+    usMp <- us$newMp
+    usCor = cor(usUn, usMp, method = "spearman")
+  }
+  # South America
+  {
+    sa <- contDf(unDf, mpDf, south_america)
+    saUn <- sa$newUn
+    saMp <- sa$newMp
+    saCor = cor(saUn, saMp, method = "spearman")
+  }
   
+  saCor <- correl(0.7, saCor)
+  usCor <- correl(0.7, usCor)
+  euCor <- correl(0.7, euCor)
+  asCor <- correl(0.7, asCor)
+  afCor <- correl(0.7, afCor)
+  
+  View(saCor)
+  View(usCor)
+  View(euCor)
+  View(asCor)
+  View(afCor)
+
 }
 
-correlM <- melt(correl) 
+# Purely for checking if there are similar result from the different dataframes. Not to really be used in the final
+# report. It didnt give much at all, but keeping it here for testing purposes. You never know, might find something interesting
+# with other data. 
 
-ggplot(correlM, aes(x = Var1, y = value, fill = Var2)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(title = "Correlations", x = "UN stats", y = "Correlation value", fill = "MP in foods")
+  {
+    contCors <- list(
+      Africa = afCor,
+      Asia = asCor,
+      Europe = euCor,
+      NorthAmerica = usCor,
+      SouthAmerica = saCor
+    )
+    
+    all_pairs <- lapply(names(contCors), function(cont) {
+      melt(contCors[[cont]]) %>% 
+        filter(abs(value) >= 0.7) %>% 
+        mutate(Continent = cont)
+    }) %>% bind_rows() %>% 
+      rename(UN = Var1, MP = Var2, Correlation = value)
+    
+    
+    aggregated <- all_pairs %>% 
+      group_by(UN, MP) %>% 
+      summarise(
+        Avg_Correlation = mean(Correlation),
+        Continents = n()
+      ) %>% 
+      arrange(desc(Continents), desc(Avg_Correlation))
+    
+    View(aggregated)
+  }
+
+
 
 
