@@ -9,7 +9,7 @@
   source("../CleaningTwoSets.R")
   source("../ContinentVector.R")
   
-  un <- read.csv("un_clean_2018.csv", row.names = 1)
+  un <- read.csv("cleanPol.csv", row.names = 1)
   mp <- read.csv("Figure.S6a_2018.csv", row.names = 1)
 
   data <- eqClean(mp, un)
