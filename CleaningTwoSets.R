@@ -1,31 +1,30 @@
 # Author: Eirik
 # Script for merging mainframe and new frames.
 
-eqClean <- function(mp, un) {
+eqClean <- function(main, second) {
   library(dplyr)
-  commonCol <- intersect(colnames(un), colnames(mp))
+  commonCol <- intersect(colnames(second), colnames(main))
   
-  un <- un %>% select(all_of(commonCol))
-  mp <- mp %>% select(all_of(commonCol))
+  second <- second %>% select(all_of(commonCol))
+  main <- main %>% select(all_of(commonCol))
   
-  unDf <- as.data.frame(un)
-  mpDf <- as.data.frame(mp)
+  secondDf <- as.data.frame(second)
+  mainDf <- as.data.frame(main)
   
-  unDf[] <- lapply(unDf, as.character)
-  mpDf[] <- lapply(mpDf, as.character)
+  secondDf[] <- lapply(secondDf, as.character)
+  mainDf[] <- lapply(mainDf, as.character)
   
-  unDf[] <- lapply(unDf, function(x) as.numeric(as.character(x)))
-  mpDf[] <- lapply(mpDf, function(x) as.numeric(as.character(x)))
+  secondDf[] <- lapply(secondDf, function(x) as.numeric(as.character(x)))
+  mainDf[] <- lapply(mainDf, function(x) as.numeric(as.character(x)))
   
-  print(paste("Antall rader i unDf etter filtrering:", nrow(unDf)))
-  print(paste("Antall rader i mpDf etter filtrering:", nrow(mpDf)))
+  print(paste("Antall rader i unDf etter filtrering:", ncol(secondDf)))
+  print(paste("Antall rader i mpDf etter filtrering:", ncol(mainDf)))
   
-  unDf[] <- lapply(unDf, as.numeric)
-  mpDf[] <- lapply(mpDf, as.numeric)
+  secondDf[] <- lapply(secondDf, as.numeric)
+  mainDf[] <- lapply(mainDf, as.numeric)
   
-  unDf <- na.omit(unDf)
-  mpDf <- na.omit(mpDf)
+  secondDf <- na.omit(secondDf)
+  mainDf <- na.omit(mainDf)
   
-  return(list(unDf = unDf, mpDf = mpDf))
+  return(list(secondDf = secondDf, mainDf = mainDf))
 }
-
