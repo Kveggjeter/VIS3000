@@ -8,10 +8,8 @@
   library(tidyr)
   source("../CleaningTwoSets.R")
   source("../ContinentVector.R")
-  
-  un <- read.csv("un_clean_2018.csv", row.names = 1)
+  un <- read.csv("un_clean_2018.csv", row.names = 1) 
   mp <- read.csv("Figure.S6a_2018.csv", row.names = 1)
-
   data <- eqClean(mp, un)
   unDf <- data$unDf
   mpDf <- data$mpDf
@@ -55,6 +53,7 @@
     af <- contDf(unDf, mpDf, africa)
     afUn <- af$newUn
     afMp <- af$newMp
+    write.csv(afMp, paste0("africaMp.csv"), row.names = TRUE)
     afCor = cor(afUn, afMp, method = "spearman")
   }
   # Asia
@@ -62,6 +61,7 @@
     as <- contDf(unDf, mpDf, asia)
     asUn <- as$newUn
     asMp <- as$newMp
+    write.csv(asMp, paste0("asiaMp.csv"), row.names = TRUE)
     asCor = cor(asUn, asMp, method = "spearman")
   }
   # Europe
@@ -69,6 +69,7 @@
     eu <- contDf(unDf, mpDf, europe)
     euUn <- eu$newUn
     euMp <- eu$newMp
+    write.csv(euMp, paste0("europaMp.csv"), row.names = TRUE)
     euCor = cor(euUn, euMp, method = "spearman")
   }
   # North America
@@ -76,6 +77,7 @@
     us <- contDf(unDf, mpDf, north_america)
     usUn <- us$newUn
     usMp <- us$newMp
+    write.csv(usMp, paste0("usMp.csv"), row.names = TRUE)
     usCor = cor(usUn, usMp, method = "spearman")
   }
   # South America
@@ -83,6 +85,7 @@
     sa <- contDf(unDf, mpDf, south_america)
     saUn <- sa$newUn
     saMp <- sa$newMp
+    write.csv(saMp, paste0("saMp.csv"), row.names = TRUE)
     saCor = cor(saUn, saMp, method = "spearman")
   }
   
@@ -97,7 +100,6 @@
   View(euCor)
   View(asCor)
   View(afCor)
-
 }
 
 # Purely for checking if there are similar result from the different dataframes. Not to really be used in the final
