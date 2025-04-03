@@ -1,10 +1,12 @@
 test
-```j
+```js client
+import { LitElement, html } from 'https://unpkg.com/lit-element?module';
 
-var fred =99;
+class MyEl extends LitElement {
+  render() {
+    this.innerHTML = 'I am alive';
+  }
+}
 
-var jim = 100;
-
-console.log(fred,jim);
-
+customElements.define('my-el', MyEl);
 ```
