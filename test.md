@@ -7,6 +7,7 @@ class MyEl extends LitElement {
     this.innerHTML = 'I am alive';
   }
 }
+console.log('heihei')
 
 customElements.define('my-el', MyEl);
 ```
