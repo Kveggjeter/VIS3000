@@ -2,17 +2,19 @@
 # Script for checking the correlation between data
 # Testing different data
 {
+  #setwd(file.path("VIS3000","data"))
   library(ggplot2)
   library(reshape2)
   library(dplyr)
   library(tidyr)
   source("../CleaningTwoSets.R")
   source("../ContinentVector.R")
-  un <- read.csv("un_clean_2018.csv", row.names = 1) 
+  
+  un <- read.csv("industry_value_added.csv", row.names = 1)
   mp <- read.csv("Figure.S6a_2018.csv", row.names = 1)
   data <- eqClean(mp, un)
-  unDf <- data$unDf
-  mpDf <- data$mpDf
+  unDf <- data$secondDf
+  mpDf <- data$mainDf
  
 # Seperating countries by continent in seperate df
   continent <- function(df1, df2, place) {
