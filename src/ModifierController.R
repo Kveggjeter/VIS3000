@@ -12,13 +12,22 @@ modifierController <- function() {
   
   getwd()
   mainDf <- read.csv("data/processed/Figure.s6a_2018.csv", , row.names = 1)
-  secondDf <- read.csv("data/processed/industry_value_added.csv", , row.names = 1)
+  secondDf <- read.csv("data/processed/alzheimer_clean.csv", , row.names = 1)
   
-  mergeFrames(mainDf, secondDf)
+  newDf <- mergeFrames(mainDf, secondDf)
+  
   correlationData(mainDf, secondDf)
   
   # Use this on a df in Tableau if you get weird values. 
-  mirrorRowsAndColls(mainDf)
+  newDf <- mirrorRowsAndColls(newDf)
+  View(newDf)
+  {
+    setwd("data/processed")
+    write.csv(newDf,
+              paste0("mainDf_with_alzheimer.csv"),
+              row.names = TRUE)
+    setwd("../../")
+  }
 
 
 

@@ -10,10 +10,8 @@ mergeFrames <- function(mainDf, secondDf){
   secondDf <- data$secondDf
   mainDf <- data$mainDf
   
-  View(mainDf)
-  View(secondDf)
   newDf <- bind_rows(secondDf, mainDf)
   View(newDf)
-
+  return(newDf)
 }
 
