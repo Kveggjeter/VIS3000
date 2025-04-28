@@ -48,7 +48,23 @@ industryData <- function() {
     names(industryDf)[names(industryDf) == "Egypt..Arab.Rep."]     <- "Egypt"
     
     setwd("data/processed")
+    
     write.csv(industryDf, paste0("industry_value_added.csv"), row.names = TRUE)
+
+    # transposed for maximum tableau convenience
+    tIndustryDf <- t(industryDf)
+    colnames(tIndustryDf) <- tIndustryDf[1,]
+    tIndustryDf <- tIndustryDf[-1,]
+    write.csv(tIndustryDf, paste0("industry_value_added(countries_as_rows).csv"), row.names = TRUE)
+
+    # only data fra 2018, in case that's easier to work with
+    indData2018 <- as.data.frame(industryDf[59,-c(1, which(colnames(industryDf)=="Venezuela"))])
+    write.csv(indData2018, paste0("industry_value_added_2018.csv"), row.names = TRUE)
+    
+    tIndData2018 <- t(indData2018)
+    tIndData2018 <- tIndData2018[-1,]
+    write.csv(tIndData2018, paste0("industry_value_added_2018(countries_as_rows).csv"), row.names = TRUE)
+    
     setwd("../../")
   }
   
