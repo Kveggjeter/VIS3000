@@ -69,5 +69,7 @@ industryData <- function() {
     write.csv(tIndData2018, paste0("industry_value_added_2018(countries_as_rows).csv"), row.names = TRUE)
     
     setwd("../../")
+    
+    return(industryDf)
   }
 }
