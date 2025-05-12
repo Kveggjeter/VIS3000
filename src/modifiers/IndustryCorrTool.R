@@ -55,6 +55,9 @@ industryFilteredCorr <- function(region, title, method, dataSelection, foodCateg
   source("src/modifiers/CleaningTwoSets.R")
   source("src/constants/ContinentVector.R")
   source("src/modifiers/CleaningTwoSets.R")
+  source("src/cleaner/IndustryData.R")
+  
+  industryDf <- industryData()
   
   # create vector containing all GDP rates in 2018. Leave venezuela, as it does not have data from 2018
   indData2018 <- as.data.frame(industryDf[59,-c(1, which(colnames(industryDf)=="Venezuela"))])
@@ -120,6 +123,8 @@ filteredCorrMatrix <- function(region, sigLevel, method) {
     method <- "spearman"
   }
   
+  industryDf <- industryData()
+  
   library(dplyr)
   library(ggplot2)
   library(ggcorrplot)
@@ -137,7 +142,7 @@ filteredCorrMatrix <- function(region, sigLevel, method) {
   mp <- contList$regionalMain
   gdpVec <- contList$regionalSecond
   
-  clean <- eqClean(mp, indData2018)
+  clean <- eqClean(mp, gdpVec)
   df <- clean$mainDf
   
   df <- rbind(df, gdpVec) |>
