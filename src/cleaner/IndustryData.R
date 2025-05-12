@@ -1,8 +1,11 @@
-# Author: Hinrik
+# Author: 7012
 
-# Script cleans dataset for rates of industrialization, measured in GDP value added (%) 
-# from industry, per year.
+# Script cleans dataset for values denoting industry value added (% of GDP) per year.
+# This indicator was hinted towards in the study by Zhou & You as a possible correlative factor
+# useful in estimating MP reduction. Our findings were not as conclusive.
 
+# You can do visual correlation analyses with this dataset and the MP dataset with the 
+# InudstryCorrTool.R script in the modifier directory.
 industryData <- function() {
 
   {
@@ -67,57 +70,4 @@ industryData <- function() {
     
     setwd("../../")
   }
-  
-  # from CorrelationData.R, changed slightly
-  continentDf <- function(main,second,region) {
-    unCols <- colnames(main)[colnames(main) %in% region]
-    main <- main[, unCols, drop = FALSE]
-    
-    mpCols <- colnames(second)[colnames(second) %in% region]
-    second <- second[, mpCols, drop = FALSE]
-    
-    main <- as.data.frame(main)
-    second <- as.data.frame(second)
-    
-    return(list(regionalMain = main, regionalSecond = second))
-  }
-  
-  mergeDf <- function(df1, df2, regionVec = NULL) {
-    source("src/modifiers/CleaningTwoSets.R")
-    
-    if(!is.null(regionVec)) {
-      contList <- continentDf(df1, df2, regionVec)
-      df1 <- contList$regionalMain
-      df2 <- contList$regionalSecond
-    }
-    
-    cleanData <- eqClean(df1, df2)
-    sumMp <- rowSums(t(cleanData$mainDf[-c(1),])) # MP sum per country 
-    gdpVec <- as.character(cleanData$secondDf[1,])
-    corDf <- data.frame(sumMp, gdpVec)
-    corDf <- type.convert(corDf, as.is = TRUE)
-    return(corDf)
-  }
-  
-  # correlation with MP
-  {
-    library(ggplot2)
-    library(dplyr)
-    source("src/modifiers/CleaningTwoSets.R")
-    source("src/constants/ContinentVector.R")
-    
-    # create vector containing all GDP rates in 2018. Leave venezuela, as it does not have data from 2018
-    indData2018 <- as.data.frame(industryDf[59,-c(1, which(colnames(industryDf)=="Venezuela"))])
-    mp <- as.data.frame(read.csv("data/processed/Figure.s6a_2018.csv", stringsAsFactors = FALSE))
-    
-    corDf <- mergeDf(mp, indData2018, africa)
-    corCoefficient <- cor(corDf[,1], corDf[,2], method = "spearman")
-    
-    ggplot(corDf, aes(x=gdpVec, y=sumMp, label=rownames(corDf))) +
-      geom_point(alpha=0.7) + geom_text()+geom_smooth(method=lm) +
-      xlab("Industry value added (% of GDP) in 2018") + 
-      ylab("Total average MP consumption (mg/capita/day)") +
-      ggtitle(paste(" Africa\nR =", corCoefficient))
-  }
-
 }
