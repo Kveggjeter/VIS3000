@@ -7,6 +7,7 @@ modifierController <- function() {
   source("src/modifiers/CorrelationData.R")
   source("src/modifiers/MergeFrames.R")
   source("src/modifiers/MirrorRowsAndColls.R")
+  source("src/modifiers/IndustryCorrTool.R")
 }
 
   
@@ -20,6 +21,7 @@ modifierController <- function() {
   # Use this on a df in Tableau if you get weird values. 
   mirrorRowsAndColls(mainDf)
 
-
-
+  # here are some visualizations! (IndustryCorrTool.R)
+  industryFilteredCorr(region = east_southeast_asia, title = "East and Southeast Asia", method = "spearman")
+  filteredCorrMatrix(region = north_america, method = "spearman")
 
