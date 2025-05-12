@@ -4,6 +4,19 @@
 # Includes correlations with scatterplots, and another type that analysis the correlation for each 
 # food type in a correlation matrix as well.
 
+# from CorrelationData.R, changed slightly
+continentDf <- function(main,second,region) {
+  unCols <- colnames(main)[colnames(main) %in% region]
+  main <- main[, unCols, drop = FALSE]
+  
+  mpCols <- colnames(second)[colnames(second) %in% region]
+  second <- second[, mpCols, drop = FALSE]
+  
+  main <- as.data.frame(main)
+  second <- as.data.frame(second)
+  
+  return(list(regionalMain = main, regionalSecond = second))
+}
 
 #' Create a ggplot2 correlation plot between MP and Industry datsets with region filter
 #'
