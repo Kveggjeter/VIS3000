@@ -1,15 +1,15 @@
 # Author: 7008
-
 foodSecurityData <- function() {
-
   library(dplyr)
   library(tidyr)
   
+  # Load the food security dataset
   df <- read.csv("data/raw/support/Food_Security_Data_2018.csv", fileEncoding = "Latin1", stringsAsFactors = FALSE)
   
-  # Filter for 2018 data
+  # Keep only 2018 data
   df <- df[df$Year == "2018", ]
   
+  # Get unique countries and indicators
   countries <- unique(df$Area)
   indicators <- unique(df$Item)
   
@@ -19,31 +19,32 @@ foodSecurityData <- function() {
   print("Indicators (Items):")
   print(indicators)
   
-  # Convert percentage columns to numeric
+  # Fix percentage columns - remove % symbol and convert to decimal
   df <- df %>%
     mutate(across(contains("%"), ~ as.numeric(gsub("%", "", .))/100))
   
-  # Ensure all columns are of the correct data types
+  # Convert text columns to factors for better handling
   df <- df %>%
-    mutate(across(where(is.character), as.factor))  # Convert character columns to factors
+    mutate(across(where(is.character), as.factor))
   
-  # Create pivot matrix with countries as rows and indicators as columns
+  # Create a pivot table with countries as rows and indicators as columns
   pivot_matrix <- matrix(NA, nrow = length(countries), ncol = length(indicators))
   rownames(pivot_matrix) <- countries
   colnames(pivot_matrix) <- indicators
   
+  # Fill the matrix with values from the dataset
   for (i in 1:nrow(df)) {
     country <- df$Area[i]
     indicator <- df$Item[i]
     pivot_matrix[country, indicator] <- df$Value[i]
   }
   
-  # Convert the pivot matrix to a data frame
+  # Convert matrix to data frame for easier manipulation
   df_pivot <- as.data.frame(pivot_matrix)
   
-  # Clean column names
+  # Function to make column names more readable
   clean_column_names <- function(df) {
-    # Map for renaming columns (you can add more mappings if needed)
+    # Map abbreviated names to full names
     name_map <- c(
       "Avg Val Food Prod" = "Average Value of Food Production",
       "Pct Children Stunted" = "Percentage of Children Stunted",
@@ -61,12 +62,13 @@ foodSecurityData <- function() {
     return(df)
   }
   
-  # Apply column name cleaning
+  # Clean up column names
   df_pivot <- clean_column_names(df_pivot)
   
-  # Handle missing values
-  df_pivot[df_pivot == "NA"] <- NA  # Replace "NA" strings with actual NAs
+  # Replace "NA" strings with actual missing values
+  df_pivot[df_pivot == "NA"] <- NA
   
+  # Convert columns to numeric if most values can be converted
   for (col in colnames(df_pivot)) {
     test_values <- as.character(df_pivot[[col]])
     test_values <- test_values[!is.na(test_values)]
@@ -77,7 +79,7 @@ foodSecurityData <- function() {
     }
   }
   
-  # Handle outliers using IQR method
+  # Remove extreme outliers using the IQR method
   for (col in colnames(df_pivot)) {
     if (!is.numeric(df_pivot[[col]]) || sum(is.na(df_pivot[[col]])) > nrow(df_pivot) * 0.5) next
     
@@ -85,19 +87,19 @@ foodSecurityData <- function() {
     q3 <- quantile(df_pivot[[col]], 0.75, na.rm = TRUE)
     iqr <- q3 - q1
     
+    # Set bounds for outliers
     lower_bound <- q1 - 1.5 * iqr
     upper_bound <- q3 + 1.5 * iqr
-    
     
     df_pivot[[col]][df_pivot[[col]] < lower_bound] <- lower_bound
     df_pivot[[col]][df_pivot[[col]] > upper_bound] <- upper_bound
   }
   
-  # Transpose the data for final format (rows = countries, columns = indicators)
+  # Flip the table so countries are rows and indicators are columns
   df_final <- as.data.frame(t(df_pivot))
   
+  # Save the cleaned data
   setwd("data/processed")
-  # Save cleaned dataset to a new CSV file
   write.csv(df_final, "Cleaned_Food_Security_Data_2018.csv", row.names = TRUE)
   setwd("../../")
 }
