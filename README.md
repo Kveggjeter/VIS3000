@@ -1,22 +1,28 @@
-# VIS3000 repo for R
+# VIS3000 datapreperation scripts
 
-Repo for VIS3000.
+This is the scripts responsible for cleaning and preparing data fro analysis. It also contains functions to make visualizations on correlations. 
 
 >[!TIP]
->Hvordan sette opp spetakellet? 
+>How to use this to get the same results we refference in the report?
 
-1. Last ned R fra -> [HER](https://cran.r-project.org/bin/windows/base/).
-2. Last ned R-studio fra -> [HER](https://posit.co/download/rstudio-desktop/).
-3. Åpne R-studio og lag deg ei prosjektmappe
-4. Skriv dette her i terminalen
+1. Make sure your working enviroment are in the same directory as the Main.R file is located
+2. Run Main.R and follow the instructions given from the comments
+3. After Main.R has been run (and only after!) can the controller scripts be used manually
+4. ModifierController (located in /src/) imports all the modifier scripts and can be used for doing analysis on the prepared CSV documents
 
-```
-git clone https://github.com/Kveggjeter/VIS3000
-git checkout -b dittNavn
-git push --set-upstream origin dittNavn
- 
-```
+For navigation, the project strutcture is as follow:
+
+├───data
+│   ├───processed <- Source folder for the cleaned data
+|   ├───raw <- Source folder for the raw data
+├───src <- R scripts
+|   ├───cleaner <- Scripts that cleans a dataset/or support cleaning
+|   ├───constants <- Constants (only for representing continents as of current)
+|   ├───deprecated <- Scripts we no longer use becuase of the irrelevance of the data it cleans 
+|   ├───modifiers <- Data manipulations and other functions that dont directly are used in cleaning, but are used in analysing, visualization or general modification of the CSV files.
+
+
 >[!NOTE]
->Kun push til egen branch. Hvis det skal merges med main må det lages en pull request. 
+>You might need to install a couple of libraries if they are not present in your enviroment. Mainly for anything related to the modifiers, further instructions are present in the comments.
 
 
