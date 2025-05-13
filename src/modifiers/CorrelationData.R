@@ -53,7 +53,7 @@ correlationData <- function(mainDf, secondDf){
       afSecondDf <- af$newSecondDf
       afMainDf <- af$newMainDf
       write.csv(afMainDf, paste0("africaMp.csv"), row.names = TRUE)
-      afCor = cor(afSecondDf, afMainDf, method = "spearman")
+      afCor = cor(afSecondDf, afMainDf, method = "pearson")
     }
     # Asia
     {
@@ -61,7 +61,7 @@ correlationData <- function(mainDf, secondDf){
       asSecondDf <- as$newSecondDf
       asMainDf <- as$newMainDf
       write.csv(asMainDf, paste0("asiaMp.csv"), row.names = TRUE)
-      asCor = cor(asSecondDf, asMainDf, method = "spearman")
+      asCor = cor(asSecondDf, asMainDf, method = "pearson")
     }
     # Europe
     {
@@ -69,7 +69,7 @@ correlationData <- function(mainDf, secondDf){
       euSecondDf <- eu$newSecondDf
       euMainDf <- eu$newMainDf
       write.csv(euMainDf, paste0("europaMp.csv"), row.names = TRUE)
-      euCor = cor(euSecondDf, euMainDf, method = "spearman")
+      euCor = cor(euSecondDf, euMainDf, method = "pearson")
     }
     # North America
     {
@@ -77,7 +77,7 @@ correlationData <- function(mainDf, secondDf){
       usSecondDf <- us$newSecondDf
       usMainDf <- us$newMainDf
       write.csv(usMainDf, paste0("usMainDf.csv"), row.names = TRUE)
-      usCor = cor(usSecondDf, usMainDf, method = "spearman")
+      usCor = cor(usSecondDf, usMainDf, method = "pearson")
     }
     # South America
     {
@@ -85,7 +85,7 @@ correlationData <- function(mainDf, secondDf){
       saSecondDf <- sa$newSecondDf
       saMainDf <- sa$newMainDf
       write.csv(saMainDf, paste0("saMainDf.csv"), row.names = TRUE)
-      saCor = cor(saSecondDf, saMainDf, method = "spearman")
+      saCor = cor(saSecondDf, saMainDf, method = "pearson")
     }
     
     saCor <- correl(0.7, saCor)

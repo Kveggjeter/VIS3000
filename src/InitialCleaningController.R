@@ -8,7 +8,7 @@ initialCleaningController <- function() {
   source("src/cleaner/FoodSecurityData.R")
   source("src/cleaner/IndustryData.R")
   source("src/cleaner/AlzheimersData.R")
-  getwd()
+  
   print("Starting the splitting of the main datasets..")
   splittingUpMainDatasets()
   print("finished splitting the main datasets.")
