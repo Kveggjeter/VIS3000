@@ -1,4 +1,4 @@
-# Author: Eirik, 7012
+# Author: 7036 & 7012
 # To not waste space in other parts of the code, heres the vectoring of countries to continent
 
 africa <- c("Algeria", "Angola", "Benin", "Burkina.Faso", "Cameroon", 

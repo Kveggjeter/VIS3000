@@ -1,4 +1,4 @@
-#Author: Eirik
+#Author: 7036
 mirrorRowsAndColls <- function(df) {
 
   df <- as.data.frame(t(df))

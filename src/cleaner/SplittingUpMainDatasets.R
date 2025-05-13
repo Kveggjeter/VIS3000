@@ -1,4 +1,4 @@
-# Author: Eirik
+# Author: 7036
 
 # This is the script for cleaning the main data we got. It contains some general functions that are reusable for similar datasets.
 # Its still up for improvment.

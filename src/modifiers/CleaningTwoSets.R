@@ -1,4 +1,4 @@
-# Author: Eirik
+# Author: 7036
 # Script for merging mainframe and new frames.
 
 eqClean <- function(main, second) {

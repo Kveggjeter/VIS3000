@@ -6,6 +6,7 @@
 
 # from CorrelationData.R, changed slightly
 continentDf <- function(main,second,region) {
+  
   unCols <- colnames(main)[colnames(main) %in% region]
   main <- main[, unCols, drop = FALSE]
   

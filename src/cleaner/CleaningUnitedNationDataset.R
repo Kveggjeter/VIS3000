@@ -1,4 +1,4 @@
-# Author: Eirik
+# Author: 7036
 # This script is for cleaning and selecting relevant columns for a new dataframe. Currently only the example dataset
 # A lot of data we don't need here, only using Base R here. Should not be necessary as it is now to make this abstract, as each
 # dataset will differ.

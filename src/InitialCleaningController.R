@@ -1,4 +1,4 @@
-# Author: Eirik
+# Author: 7036
 # controller for cleaning our datasets. Can be instanced from Main or just directly one by one here. When we have what we need, we'll only include the main datasets in our 
 # final file-folder. 
 
@@ -20,7 +20,6 @@ initialCleaningController <- function() {
   foodSecurityData()
   print("Finished cleaning the Food Security dataset..")
   
-  # Split this up, Hinrik?
   print("Starting cleaning of Industry Data dataset..")
   industryData()
   print("Finished cleaning of Industry Data dataset..")
