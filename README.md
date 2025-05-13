@@ -12,14 +12,14 @@ This is the scripts responsible for cleaning and preparing data fro analysis. It
 
 For navigation, the project strutcture is as follow:
 
-├───data
-│   ├───processed <- Source folder for the cleaned data
-|   ├───raw <- Source folder for the raw data
-├───src <- R scripts
-|   ├───cleaner <- Scripts that cleans a dataset/or support cleaning
-|   ├───constants <- Constants (only for representing continents as of current)
-|   ├───deprecated <- Scripts we no longer use becuase of the irrelevance of the data it cleans 
-|   ├───modifiers <- Data manipulations and other functions that dont directly are used in cleaning, but are used in analysing, visualization or general modification of the CSV files.
+├───data <br>
+│   ├───processed <- Source folder for the cleaned data <br>
+|   ├───raw <- Source folder for the raw data <br>
+├───src <- R scripts <br>
+|   ├───cleaner <- Scripts that cleans a dataset/or support cleaning <br>
+|   ├───constants <- Constants (only for representing continents as of current) <br>
+|   ├───deprecated <- Scripts we no longer use becuase of the irrelevance of the data it cleans <br> 
+|   ├───modifiers <- Data manipulations and other functions that dont directly are used in <br> cleaning, but are used in analysing, visualization or general modification of the CSV files.
 
 
 >[!NOTE]
